@@ -5,13 +5,14 @@
 
   vars:
     xml_file_path: "/Users/bajoris/git/update_xml/files/ssh.xml"
+    hostname: "dev.customer.com"
 
   tasks:
     - name: Update XML file using lineinfile
       lineinfile:
         path: "{{ xml_file_path }}"
         regexp: '<hostname>dev.example.com</hostname>'
-        line: '<hostname>dev.customer.com</hostname>'
+        line: '<hostname>{{ hostname }}</hostname>'
         backrefs: yes
       
     - name: Ensure a new element exists
