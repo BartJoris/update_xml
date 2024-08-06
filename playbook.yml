@@ -6,14 +6,16 @@
   vars:
     xml_file_path: "/Users/bajoris/git/update_xml/files/ssh.xml"
     hostname: "dev.customer.com"
+    username: admin
 
   tasks:
-    - name: Update XML file using lineinfile
+    - name: Update user in XML file using lineinfile
       lineinfile:
         path: "{{ xml_file_path }}"
-        regexp: '<hostname>dev.example.com</hostname>'
-        line: '<hostname>{{ hostname }}</hostname>'
+        regexp: '<user>username</user>'
+        line: '<user>{{ username }}</user>'
         backrefs: yes
+        backup: yes
       
     - name: Ensure a new element exists
       lineinfile:
@@ -21,7 +23,7 @@
         insertafter: '</global-settings>'
         line: '  <new_element>some_value</new_element>'
 
-    - name: Add new host block
+    - name: Add new host block with blockinfile
       blockinfile:
         path: "{{ xml_file_path }}"
         insertbefore: "</ssh-config>"
@@ -34,3 +36,10 @@
             <identity-file>~/.ssh/new_server_rsa</identity-file>
             <forward-agent>yes</forward-agent>
           </host>
+
+    - name: Ensure a new element exists
+      xml:
+        path: "{{ xml_file_path }}"
+        xpath: "/ssh-config/global-settings"
+        add_children:
+          - new_element: "some_value"

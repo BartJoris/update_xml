@@ -5,6 +5,9 @@ The `playbook.yml` file contains Ansible tasks that modify the `ssh.xml` file lo
 1. Updates existing XML elements using the `lineinfile` module
 2. Adds new XML elements using the `lineinfile` module
 3. Inserts a new host block using the `blockinfile` module
+4. Adds new XML elements using the `xml` module
+
+**Note:** you can automatically generate a backup of the original file by adding the `--backup` flag to the `lineinfile` and `blockinfile` modules.
 
 ## Usage
 
@@ -19,12 +22,19 @@ The `playbook.yml` file contains Ansible tasks that modify the `ssh.xml` file lo
    ```bash
    diff files/ssh-original.xml files/ssh.xml
 
-    6a7
-    >   <new_element>some_value</new_element>
-    18c19
-    <     <hostname>dev.example.com</hostname>
+    1c1
+    < <?xml version="1.0" encoding="UTF-8"?>
     ---
-    > <hostname>dev.customer.com</hostname>
+    > <?xml version='1.0' encoding='UTF-8'?>
+    6c6,7
+    <   </global-settings>
+    ---
+    >   <new_element>some_value</new_element></global-settings>
+    >   <new_element>some_value</new_element>
+    12c13
+    <     <user>username</user>
+    ---
+    > <user>admin</user>
     23a25,34
     > # BEGIN ANSIBLE MANAGED BLOCK
     > <host>
@@ -37,3 +47,9 @@ The `playbook.yml` file contains Ansible tasks that modify the `ssh.xml` file lo
     > </host>
     > # END ANSIBLE MANAGED BLOCK
    ```
+
+   ## Additional resources
+
+   - [Ansible Documentation lineinfile](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html)
+   - [Ansible Documentation blockinfile](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html)
+   - [Ansible Documentation xml](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/xml_module.html)
