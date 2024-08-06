@@ -1,0 +1,35 @@
+---
+- name: Update XML file
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    xml_file_path: "/Users/bajoris/git/update_xml/files/ssh.xml"
+
+  tasks:
+    - name: Update XML file using lineinfile
+      lineinfile:
+        path: "{{ xml_file_path }}"
+        regexp: '<hostname>dev.example.com</hostname>'
+        line: '<hostname>dev.customer.com</hostname>'
+        backrefs: yes
+      
+    - name: Ensure a new element exists
+      lineinfile:
+        path: "{{ xml_file_path }}"
+        insertafter: '</global-settings>'
+        line: '  <new_element>some_value</new_element>'
+
+    - name: Add new host block
+      blockinfile:
+        path: "{{ xml_file_path }}"
+        insertbefore: "</ssh-config>"
+        block: |
+          <host>
+            <name>example-server2</name>
+            <hostname>new.example.com</hostname>
+            <port>2222</port>
+            <user>newuser</user>
+            <identity-file>~/.ssh/new_server_rsa</identity-file>
+            <forward-agent>yes</forward-agent>
+          </host>
