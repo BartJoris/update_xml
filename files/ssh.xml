@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ssh-config>
   <global-settings>
     <default-timeout>30</default-timeout>
     <compression>yes</compression>
-  </global-settings>
+  <new_element>some_value</new_element></global-settings>
+  <new_element>some_value</new_element>
   
   <host>
     <name>example-server</name>
     <hostname>example.com</hostname>
     <port>22</port>
-    <user>username</user>
+<user>admin</user>
     <identity-file>~/.ssh/id_rsa</identity-file>
   </host>
   
@@ -21,4 +22,14 @@
     <identity-file>~/.ssh/dev_rsa</identity-file>
     <forward-agent>yes</forward-agent>
   </host>
+# BEGIN ANSIBLE MANAGED BLOCK
+<host>
+  <name>example-server2</name>
+  <hostname>new.example.com</hostname>
+  <port>2222</port>
+  <user>newuser</user>
+  <identity-file>~/.ssh/new_server_rsa</identity-file>
+  <forward-agent>yes</forward-agent>
+</host>
+# END ANSIBLE MANAGED BLOCK
 </ssh-config>
